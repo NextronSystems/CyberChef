@@ -352,6 +352,7 @@
             "Unescape string",
             "Pseudo-Random Number Generator",
             "Sleep",
+            "toYaraStrings",
             "File Tree",
             "Wrap",
             "Take nth bytes",
