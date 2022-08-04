@@ -5,7 +5,6 @@
  */
 
 import Operation from "../Operation.mjs";
-//import { toHex } from "./Hex.mjs";
 /**
  * vtsearch operation
  */
