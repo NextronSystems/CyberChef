@@ -5,6 +5,7 @@
  */
 
 import Operation from "../Operation.mjs";
+import Utils from "../Utils.mjs";
 /**
  * vtsearch operation
  */
@@ -15,10 +16,12 @@ class Vtsearch extends Operation {
     constructor() {
         super();
 
-        this.name = "vtsearch";
+        this.name = "Virus Total Content Search";
         this.module = "Default";
-        this.description = "Converts Input to a virus total search string";
-        this.infoURL = "https://www.virustotal.com/gui/home/search";
+        this.description =
+            "Converts UTF8-Encoded Input to a virus total content search string. Module will try to determine if input is a Hex string and convert it accordingly";
+        this.infoURL =
+            "https://support.virustotal.com/hc/en-us/articles/360001386897-Content-search-VTGrep-";
         this.inputType = "string";
         this.outputType = "string";
         this.args = [
@@ -33,17 +36,15 @@ class Vtsearch extends Operation {
                 value: "true",
             },
             {
-                name: "Combine with OR",
+                name: "OR combine",
                 type: "boolean",
                 value: "true",
             },
-            /* Example arguments. See the project wiki for full details.
             {
-                name: "Second arg",
-                type: "number",
-                value: 42
-            }
-            */
+                name: "Hex detection",
+                type: "boolean",
+                value: "true",
+            },
         ];
     }
 
@@ -53,28 +54,48 @@ class Vtsearch extends Operation {
      * @returns {string}
      */
     run(input, args) {
-        const [ascii, wide, orBool] = args;
-        // Check if input is hex
-        if (input.match(/^[0-9a-fA-F\s]+$/)) {
+        const [ascii, wide, orBool, hexDetect] = args;
+
+        if (input === "") {
+            return "";
+        }
+
+        // Check if input is hex allows skippying bytes ([1-2]) and alternatives (aabb|bbaa)
+        if (
+            hexDetect &&
+            input
+                .replace(/\s/g, "")
+                .match(
+                    /^((([0-9a-fA-F?][0-9a-fA-F?])|(\[\d+-\d+\]))|\(((([0-9a-fA-F?][0-9a-fA-F?])|(\[\d+-\d+\]))+\|?)+\))+$/
+                )
+        ) {
             return `content: {${input}}`;
         }
+
+        // Appent Brackets if Combine with OR is true
         let searchString = "";
         if (ascii && wide && orBool) {
             searchString += "( ";
         }
+
         if (ascii === true) {
             searchString += `content: "${input}" `;
         }
+
+        // Append OR if Combine with OR is true
         if (ascii && wide && orBool) {
             searchString += " OR ";
         }
-        // Input is wide. Convert to Hex
+
+        // Input is wide. Convert to Hex. Could be done with the utils.hexify?
         if (wide === true) {
             const hex = Buffer.from(input, "utf16le")
                 .toString("hex")
                 .slice(0, -2);
             searchString += `content: {${hex}} `;
         }
+
+        // Append Brackets if Combine with OR is true
         if (ascii && wide && orBool) {
             searchString += ") ";
         }
