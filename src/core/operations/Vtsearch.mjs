@@ -5,7 +5,6 @@
  */
 
 import Operation from "../Operation.mjs";
-import Utils from "../Utils.mjs";
 /**
  * vtsearch operation
  */
@@ -87,7 +86,7 @@ class Vtsearch extends Operation {
             searchString += " OR ";
         }
 
-        // Input is wide. Convert to Hex. Could be done with the utils.hexify?
+        // Input is wide. Convert to Hex. Could be done with the utils?
         if (wide === true) {
             const hex = Buffer.from(input, "utf16le")
                 .toString("hex")
