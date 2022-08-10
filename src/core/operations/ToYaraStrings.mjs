@@ -16,10 +16,10 @@ class ToYaraStrings extends Operation {
     constructor() {
         super();
 
-        this.name = "toYaraStrings";
+        this.name = "To Yara Strings";
         this.module = "Default";
         this.description =
-            "Modifies Strings so they can be used as Yara Strings";
+            "Modifies Strings so they can be used as YARA Strings";
         this.infoURL = "https://github.com/VirusTotal/yara";
         this.inputType = "string";
         this.outputType = "string";
@@ -32,12 +32,17 @@ class ToYaraStrings extends Operation {
             {
                 name: "Prefix",
                 type: "string",
-                value: "      $s",
+                value: "$s",
+            },
+            {
+                name: "Spaces",
+                type: "number",
+                value: "6",
             },
             {
                 name: "Count up",
                 type: "boolean",
-                value: false,
+                value: true,
             },
             {
                 name: "Count up from",
@@ -53,12 +58,12 @@ class ToYaraStrings extends Operation {
      * @returns {string}
      */
     run(input, args) {
-        const [splitstring, prefix, countup, countupNumber] = args;
+        const [splitstring, prefix, spaces, countup, countupNumber] = args;
         let count = countupNumber - 1;
         return input
             .split(splitstring)
             .map((str) => {
-                let pre = prefix;
+                let pre = " ".repeat(spaces) + prefix;
                 count = count + 1;
                 if (countup) {
                     pre = `${pre}${count}`;
@@ -66,32 +71,6 @@ class ToYaraStrings extends Operation {
                 return `${pre} = "${str}"`;
             })
             .join("\n");
-    }
-
-    /**
-     * Highlight toYaraStrings
-     *
-     * @param {Object[]} pos
-     * @param {number} pos[].start
-     * @param {number} pos[].end
-     * @param {Object[]} args
-     * @returns {Object[]} pos
-     */
-    highlight(pos, args) {
-        return pos;
-    }
-
-    /**
-     * Highlight toYaraStrings in reverse
-     *
-     * @param {Object[]} pos
-     * @param {number} pos[].start
-     * @param {number} pos[].end
-     * @param {Object[]} args
-     * @returns {Object[]} pos
-     */
-    highlightReverse(pos, args) {
-        return pos;
     }
 }
 
