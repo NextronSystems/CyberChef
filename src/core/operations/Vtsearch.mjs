@@ -79,7 +79,6 @@ class Vtsearch extends Operation {
 
         if (ascii === true) {
             searchString += `content: "${input.replace(/([\\"])/g, "\\$1")}" `;
-            console.log(searchString);
         }
 
         // Append OR if Combine with OR is true
