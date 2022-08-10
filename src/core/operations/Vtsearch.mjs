@@ -78,12 +78,12 @@ class Vtsearch extends Operation {
         }
 
         if (ascii === true) {
-            searchString += `content: "${input}" `;
+            searchString += `content: "${input.replace(/([\\"])/g, "\\$1")}" `;
         }
 
         // Append OR if Combine with OR is true
         if (ascii && wide && orBool) {
-            searchString += " OR ";
+            searchString += "OR ";
         }
 
         // Input is wide. Convert to Hex. Could be done with the utils?

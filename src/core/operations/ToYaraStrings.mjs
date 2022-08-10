@@ -68,7 +68,7 @@ class ToYaraStrings extends Operation {
                 if (countup) {
                     pre = `${pre}${count}`;
                 }
-                return `${pre} = "${str}"`;
+                return `${pre} = "${str.replace(/([\\"])/g, "\\$1")}"`;
             })
             .join("\n");
     }
