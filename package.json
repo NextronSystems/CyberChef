@@ -136,7 +136,7 @@
     "handlebars": "^4.7.9",
     "highlight.js": "^11.11.1",
     "ieee754": "^1.2.1",
-    "jimp": "1.6.0",
+    "jimp": "^1.6.1",
     "jq-web": "^0.5.1",
     "jquery": "3.7.1",
     "js-sha3": "^0.9.3",
@@ -191,6 +191,25 @@
     "xpath": "0.0.34",
     "xregexp": "^5.1.2",
     "zlibjs": "^0.3.1"
+  },
+  "overrides": {
+    "elliptic": "^6.6.1",
+    "serialize-javascript": "^7.0.6",
+    "shelljs": "^0.8.5",
+    "js-yaml": "^4.2.0",
+    "grunt-contrib-watch": {
+      "gaze": {
+        "globule": {
+          "minimatch": "^3.1.5"
+        }
+      }
+    },
+    "sockjs": {
+      "uuid": "^11.1.1"
+    },
+    "nightwatch": {
+      "uuid": "^11.1.1"
+    }
   },
   "scripts": {
     "start": "npx grunt dev",
